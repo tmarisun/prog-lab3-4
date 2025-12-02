@@ -6,6 +6,8 @@ import org.example.mineral.*;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+//ddhdhdghdhgd
+
 public class Scene {
 
     Mineral minerals [] = new Mineral[3];
