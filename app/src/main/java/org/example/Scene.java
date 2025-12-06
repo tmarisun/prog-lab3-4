@@ -6,11 +6,11 @@ import org.example.mineral.*;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-//ddhdhdghdhgd
 
 public class Scene {
 
-    Mineral minerals [] = new Mineral[3];
+    Mineral minerals[] = new Mineral[3];
+
     {
         minerals[0] = new MoonStone();
         minerals[1] = new Cork();
@@ -18,14 +18,14 @@ public class Scene {
 
     }
 
-    private String want() throws RuntimeException{
+    private String want() throws RuntimeException {
 
         boolean flag = false;
         Scanner sc = new Scanner(System.in);
         String s = "";
         int cnt = 0;
-        while(!flag) {
-            if(cnt > 10){
+        while (!flag) {
+            if (cnt > 10) {
                 throw new DebilException("You are debil!");
             }
             try {
@@ -37,8 +37,7 @@ public class Scene {
             } catch (NoSuchElementException e) {
                 System.out.println("Exiting...");
                 System.exit(0);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 cnt++;
                 System.out.println("You entered an incorrect response, please try again:(");
             }
@@ -52,16 +51,50 @@ public class Scene {
 
         Scanner sc = new Scanner(System.in);
         String s = sc.nextLine();
-        while(!(s.equalsIgnoreCase("NeZnaika") || s.equalsIgnoreCase("Znaika"))) {
+        while (!(s.equalsIgnoreCase("NeZnaika") || s.equalsIgnoreCase("Znaika"))) {
             s = sc.nextLine();
             System.out.println("There is no such experimenter, please check the correctness of the entered name.");
         }
         return s;
     }
 
+    public void tryPrint(Experementer exp, int i, String who) {
+        try {
+
+            ExperimentResult ans = new ExperimentResult(
+                    exp.burnTest(minerals[i]),
+                    exp.sinkTest(minerals[i]),
+                    exp.energyTest(minerals[i]),
+                    exp.decomposeTest(minerals[i]),
+                    exp.tempTest(minerals[i])
+            );
+
+            String s = ans.toString();
+            System.out.print(s);
+
+            if (who.equalsIgnoreCase("NeZnaika")){
+                System.out.println("NeZnaika blew up the house! Save yourself!");
+                System.out.println();
+            }
+            else {
+                for (int j = 0; j < 3; j++) {
+                    if (ans.cmp()[j] == Components.Uranium) {
+                        if (ans.tempTest() >= 60) {
+                            throw new NuclearDangerException("Be careful, there is a risk of exposure." +
+                                    "In order to avoid exposure, the experiment was discontinued.");
+                        }
+                    }
+                }
+            }
+        } catch (NoDecomposeException e) {
+            System.out.println(e.getMessage());
+        }
+
+    }
+
     public void start() throws NuclearDangerException {
         for (int i = 0; i < 3; i++) {
-            if(i != 0) System.out.println();
+            if (i != 0) System.out.println();
 
             System.out.println("Would you like to experiment with " + minerals[i].name + "?");
 
@@ -82,39 +115,9 @@ public class Scene {
             if (who.equalsIgnoreCase("NeZnaika")) exp = new NeZnaika();
             else exp = new Znaika();
 
-
-            try {
-
-                ExperimentResult ans = new ExperimentResult(
-                        exp.burnTest(minerals[i]),
-                        exp.sinkTest(minerals[i]),
-                        exp.energyTest(minerals[i]),
-                        exp.decomposeTest(minerals[i]),
-                        exp.tempTest(minerals[i])
-                );
-
-                String s = ans.toString();
-                System.out.print(s);
-
-                if (who.equalsIgnoreCase("NeZnaika")){
-                    System.out.println("NeZnaika blew up the house! Save yourself!");
-                    System.out.println();
-                }
-                else {
-                    for (int j = 0; j < 3; j++) {
-                        if (ans.cmp()[j] == Components.Uranium) {
-                            if (ans.tempTest() >= 60) {
-                                throw new NuclearDangerException("Be careful, there is a risk of exposure." +
-                                        "In order to avoid exposure, the experiment was discontinued.");
-                            }
-                        }
-                    }
-                }
-            } catch (NoDecomposeException e) {
-                System.out.println(e.getMessage());
-            }
+            tryPrint(exp, i, who);
 
         }
-    }
 
+    }
 }

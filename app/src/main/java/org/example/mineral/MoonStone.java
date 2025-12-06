@@ -30,13 +30,13 @@ public final class MoonStone extends Mineral {
 
     @Override
     public boolean getSinkable(){
-        sinkable = ((int)(Math.random())) == 1;
+        sinkable = (Math.random()) > 0.5;
         return sinkable;
     }
 
     @Override
     public boolean getBurnable(){
-        burnable = ((int)(Math.random())) == 1;
+        burnable = (Math.random()) > 0.5;
         return burnable;
     }
 
@@ -54,3 +54,7 @@ public final class MoonStone extends Mineral {
 
     }
 }
+
+
+
+

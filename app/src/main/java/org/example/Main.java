@@ -1,7 +1,9 @@
 package org.example;
+import org.example.Scene;
+import java.util.NoSuchElementException;
 
 public class Main {
-    void main() {
+    public static void main(String[] args) {
         Scene scene = new Scene();
         try {
             scene.start();
